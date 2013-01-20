@@ -50,7 +50,7 @@ d3.csv("yesterday.csv", function(error, csv) {
       });
     }),
     d3.max(data, function(d) {
-      return d3.min(d.values, function(v) {
+      return d3.max(d.values, function(v) {
         return v.foreground_end;
       });
     })
