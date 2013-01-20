@@ -1,9 +1,12 @@
 var margin = {top: 10, right: 10, bottom: 100, left: 40};
-var margin2 = {top: 430, right: 10, bottom: 20, left: 40};
+var margin2 = {top: 560, right: 10, bottom: 20, left: 40};
 
-var width = 960 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
-var height2 = 500 - margin2.top - margin2.bottom;
+var w = 1024;
+var h = 640;
+
+var width = w - margin.left - margin.right;
+var height = h - margin.top - margin.bottom;
+var height2 = h - margin2.top - margin2.bottom;
 
 var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([0, height]);
@@ -137,8 +140,8 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("class", "x brush")
     .call(brush)
     .selectAll("rect")
-    .attr("y", -6)
-    .attr("height", height2 + 7);
+    .attr("y", 0)
+    .attr("height", height2);
 });
 
 function brush() {
