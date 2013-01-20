@@ -24,12 +24,6 @@ var svg = d3.select("body").append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom);
 
-svg.append("defs").append("clipPath")
-  .attr("id", "clip")
-  .append("rect")
-  .attr("width", width)
-  .attr("height", height);
-
 var focus = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -89,8 +83,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .append("rect")
     .attr("x", function(d) { return x(d.foreground_begin); })
     .attr("height", rect_height)
-    .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); })
-    .attr("clip-path", "url(#clip)");
+    .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); });
 
   context.append("g")
     .attr("class", "x axis")
