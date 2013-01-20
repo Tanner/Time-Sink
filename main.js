@@ -53,7 +53,7 @@ d3.csv("yesterday.csv", function(error, csv) {
   var number_of_apps = data.length;
   var rect_height = height / number_of_apps;
 
-  var apps = svg.selectAll(".app")
+  var apps = focus.selectAll(".app")
     .data(data)
     .enter()
     .append("g")
