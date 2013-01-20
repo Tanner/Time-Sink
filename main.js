@@ -53,14 +53,18 @@ d3.csv("yesterday.csv", function(error, csv) {
   var number_of_apps = data.length;
   var rect_height = height / number_of_apps;
 
-  var apps = focus.selectAll(".app").data(data).enter().append("g").attr("class", "app");
+  var apps = svg.selectAll(".app")
+    .data(data)
+    .enter()
+    .append("g")
+    .attr("class", "app")
+    .attr("transform", function(d, i) { return "translate(0, " + (height - y(i)) + ")"; });
 
   apps.selectAll("rect")
     .data(function(d) { return d.values; })
     .enter()
     .append("rect")
     .attr("x", function(d) { return x(d.foreground_begin); })
-    .attr("y", function(d, i) { return height - y(i); })
     .attr("height", rect_height)
-    .attr("width", 20);
+    .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); });
 });
