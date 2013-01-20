@@ -2,6 +2,8 @@ Time Sink
 ---------
 This is a web visualizer for [Time Sink](http://manytricks.com/timesink/).
 
+See the example [here](http://tanner.github.com/Time-Sink/).
+
 How to Use
 ----------
 ### Export Setup
