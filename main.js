@@ -73,7 +73,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .enter()
     .append("g")
     .attr("class", "app")
-    .attr("transform", function(d, i) { return "translate(0, " + (height - y(i)) + ")"; });
+    .attr("transform", function(d, i) { return "translate(0, " + (height - rect_height - y(i)) + ")"; });
 
   apps.selectAll("rect")
     .data(function(d) { return d.values; })
@@ -95,7 +95,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .enter()
     .append("g")
     .attr("class", "app")
-    .attr("transform", function(d, i) { return "translate(0, " + (height2 - y2(i)) + ")"; });
+    .attr("transform", function(d, i) { return "translate(0, " + (height2 - rect_height - y2(i)) + ")"; });
 
   apps2.selectAll("rect")
     .data(function(d) { return d.values; })
