@@ -63,10 +63,10 @@ d3.csv("yesterday.csv", function(error, csv) {
       });
     })
   ]);
-
   x2.domain(x.domain());
 
   y.domain([0, data.length]);
+  y2.domain(y.domain());
 
   focus.append("g")
     .attr("class", "x axis")
@@ -92,12 +92,19 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); })
     .attr("clip-path", "url(#clip)");
 
+  context.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0, " + height2 + ")")
+    .call(xAxis2);
+
+  rect_height = height2 / number_of_apps;
+
   var apps2 = context.selectAll(".app")
     .data(data)
     .enter()
     .append("g")
     .attr("class", "app")
-    .attr("transform", function(d, i) { return "translate(0, " + (height - y2(i)) + ")"; });
+    .attr("transform", function(d, i) { return "translate(0, " + (height2 - y2(i)) + ")"; });
 
   apps2.selectAll("rect")
     .data(function(d) { return d.values; })
@@ -105,12 +112,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .append("rect")
     .attr("x", function(d) { return x2(d.foreground_begin); })
     .attr("height", rect_height)
-    .attr("width", function(d) { return x2(d.foreground_end) - x(d.foreground_begin); });
-
-  context.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0, " + height2 + ")")
-    .call(xAxis2);
+    .attr("width", function(d) { return x2(d.foreground_end) - x2(d.foreground_begin); });
 
   context.append("g")
     .attr("class", "x brush")
