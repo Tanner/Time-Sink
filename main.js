@@ -36,8 +36,6 @@ d3.csv("yesterday.csv", function(error, csv) {
     .sortKeys(d3.ascending)
     .entries(csv);
 
-  console.log(data);
-
   data.forEach(function(app) {
     app.values.forEach(function(values) {
       values.foreground_begin = new Date(values["Foreground Begin (Unix Time)"] * 1000);
