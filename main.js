@@ -36,6 +36,25 @@ var focus = svg.append("g")
 var context = svg.append("g")
   .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
+var gradient = svg.append("defs")
+  .append("linearGradient")
+  .attr("id", "gradient")
+  .attr("x1", "0%")
+  .attr("y1", "0%")
+  .attr("x2", "0%")
+  .attr("y2", "100%")
+  .attr("spreadMethod", "pad");
+
+gradient.append("svg:stop")
+  .attr("offset", "0%")
+  .attr("stop-color", "#805c7d")
+  .attr("stop-opacity", 1);
+
+gradient.append("svg:stop")
+    .attr("offset", "100%")
+    .attr("stop-color", "#563e53")
+    .attr("stop-opacity", 1);
+
 d3.csv("yesterday.csv", function(error, csv) {
   var data = d3.nest()
     .key(function(d) { return d["Application"]; })
@@ -88,7 +107,8 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("x", function(d) { return x(d.foreground_begin); })
     .attr("height", rect_height)
     .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); })
-    .attr("clip-path", "url(#clip)");
+    .attr("clip-path", "url(#clip)")
+    .style("fill", "url(#gradient)");
 
   context.append("g")
     .attr("class", "x axis")
@@ -110,7 +130,8 @@ d3.csv("yesterday.csv", function(error, csv) {
     .append("rect")
     .attr("x", function(d) { return x2(d.foreground_begin); })
     .attr("height", rect_height)
-    .attr("width", function(d) { return x2(d.foreground_end) - x2(d.foreground_begin); });
+    .attr("width", function(d) { return x2(d.foreground_end) - x2(d.foreground_begin); })
+    .style("fill", "url(#gradient)");
 
   context.append("g")
     .attr("class", "x brush")
