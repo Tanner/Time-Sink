@@ -127,7 +127,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("dy", "1.25em")
     .attr("font-size", rect_height / 2)
     .attr("text-anchor", "top")
-    .text(function(d) { console.log(d);  return d.key; });
+    .text(function(d) { return d.key; });
 
   context.append("g")
     .attr("class", "x axis")
@@ -163,7 +163,7 @@ d3.csv("yesterday.csv", function(error, csv) {
 
 function brush() {
   x.domain(brush.empty() ? x2.domain() : brush.extent());
-  
+
   focus.select(".x.axis").call(xAxis);
 
   focus.selectAll(".app rect")
