@@ -43,8 +43,24 @@ d3.csv("yesterday.csv", function(error, csv) {
     })
   ]);
 
+  y.domain([0, data.length]);
+
   focus.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
+
+  var number_of_apps = data.length;
+  var rect_height = height / number_of_apps;
+
+  var apps = focus.selectAll(".app").data(data).enter().append("g").attr("class", "app");
+
+  apps.selectAll("rect")
+    .data(function(d) { return d.values; })
+    .enter()
+    .append("rect")
+    .attr("x", function(d) { return x(d.foreground_begin); })
+    .attr("y", function(d, i) { return height - y(i); })
+    .attr("height", rect_height)
+    .attr("width", 20);
 });
