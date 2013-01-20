@@ -113,6 +113,13 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("clip-path", "url(#clip)")
     .style("fill", "url(#gradient)");
 
+  apps.append("text")
+    .attr("dx", "1em")
+    .attr("dy", "1.25em")
+    .attr("font-size", rect_height / 2)
+    .attr("text-anchor", "top")
+    .text(function(d) { console.log(d);  return d.key; });
+
   context.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0, " + height2 + ")")
