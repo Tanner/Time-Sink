@@ -4,6 +4,13 @@ body, html {
 
 svg {
   font: 10px sans-serif;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  margin-left: -512px;
+  margin-top: -320px;
 }
 
 .axis text {
