@@ -127,7 +127,27 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("dy", "1.25em")
     .attr("font-size", rect_height / 2)
     .attr("text-anchor", "top")
-    .text(function(d) { return d.key; });
+    .text(function(d) { return d.key; })
+    .on("mouseover", function(d, i) {
+      var foreground_time = d3.sum(d.values.map(function(e) { return e.foreground_end - e.foreground_begin; })) / 100;
+      console.log(foreground_time);
+
+      var days = Math.floor(foreground_time / (24 * 60 * 60));
+      foreground_time -= days * (24 * 60 * 60);
+
+      var hours = Math.floor(foreground_time / (60 * 60));
+      foreground_time -= hours * (60 * 60);
+
+      var minutes = Math.floor(foreground_time / 60);
+      foreground_time -= minutes * 60;
+
+      var seconds = Math.floor(foreground_time);
+
+      d3.select(this).text(d.key + " - " + days + "d " + hours + "h " + minutes + "m " + seconds + "s");
+    })
+    .on("mouseout", function(d) {
+      d3.select(this).text(d.key);
+    });
 
   context.append("g")
     .attr("class", "x axis")
