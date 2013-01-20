@@ -23,22 +23,26 @@ var brush = d3.svg.brush()
   .x(x2)
   .on("brush", brush);
 
+// Set up the SVG
 var svg = d3.select("body").append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom);
 
+// Don't draw anything outside of our clip rect
 svg.append("defs").append("clipPath")
   .attr("id", "clip")
   .append("rect")
   .attr("width", width)
   .attr("height", height);
 
+// Prepare our two drawing areas
 var focus = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var context = svg.append("g")
   .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
+// Set up the gradient for each of the foreground rects
 var gradient = svg.append("defs")
   .append("linearGradient")
   .attr("id", "gradient")
@@ -58,12 +62,15 @@ gradient.append("svg:stop")
     .attr("stop-color", "#563e53")
     .attr("stop-opacity", 1);
 
+// Load the CSV
 d3.csv("yesterday.csv", function(error, csv) {
+  // Make our data a hierarchy
   var data = d3.nest()
     .key(function(d) { return d["Application"]; })
     .sortKeys(d3.ascending)
     .entries(csv);
 
+  // Take the unix times and turn them into a time JS/d3 can use
   data.forEach(function(app) {
     app.values.forEach(function(values) {
       values.foreground_begin = new Date(values["Foreground Begin (Unix Time)"] * 1000);
@@ -71,6 +78,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     });
   });
 
+  // Set up our X/Y domains
   x.domain([
     d3.min(data, function(d) {
       return d3.min(d.values, function(v) {
@@ -93,6 +101,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
 
+  // Draw all the foreground app data in the big area (focus)
   var number_of_apps = data.length;
   var rect_height = height / number_of_apps;
 
@@ -125,6 +134,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("transform", "translate(0, " + height2 + ")")
     .call(xAxis2);
 
+  // Draw all the foreground app data in the tiny area (context)
   rect_height = height2 / number_of_apps;
 
   var apps2 = context.selectAll(".app")
@@ -153,7 +163,7 @@ d3.csv("yesterday.csv", function(error, csv) {
 
 function brush() {
   x.domain(brush.empty() ? x2.domain() : brush.extent());
-
+  
   focus.select(".x.axis").call(xAxis);
 
   focus.selectAll(".app rect")
