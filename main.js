@@ -119,4 +119,8 @@ function brush() {
   x.domain(brush.empty() ? x2.domain() : brush.extent());
 
   focus.select(".x.axis").call(xAxis);
+
+  focus.selectAll(".app rect")
+    .attr("x", function(d) { return x(d.foreground_begin); })
+    .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); });
 }
