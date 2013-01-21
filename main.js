@@ -174,9 +174,11 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("transform", function(d, i) { return "translate(0, " + (height - rect_height - y(i)) + ")"; })
     .on("mouseover", function(d, i) {
       d3.selectAll(".id-" + i + " rect.time").style("fill", "url(#hover_gradient)");
+      d3.select(this).select("text").text(d.key + " - " + d.foreground_total.days + "d " + d.foreground_total.hours + "h " + d.foreground_total.minutes + "m " + d.foreground_total.seconds + "s");
     })
     .on("mouseout", function(d, i) {
       d3.selectAll(".id-" + i + " rect.time").style("fill", "url(#gradient)");
+      d3.select(this).select("text").text(d.key);
     });
 
   apps.append("rect")
@@ -201,13 +203,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("dy", "1.25em")
     .attr("font-size", rect_height / 2)
     .attr("text-anchor", "top")
-    .text(function(d) { return d.key; })
-    .on("mouseover", function(d, i) {
-      d3.select(this).text(d.key + " - " + d.foreground_total.days + "d " + d.foreground_total.hours + "h " + d.foreground_total.minutes + "m " + d.foreground_total.seconds + "s");
-    })
-    .on("mouseout", function(d) {
-      d3.select(this).text(d.key);
-    });
+    .text(function(d) { return d.key; });
 
   context.append("g")
     .attr("class", "x axis")
