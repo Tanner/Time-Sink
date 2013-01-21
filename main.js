@@ -201,7 +201,7 @@ d3.csv("yesterday.csv", function(error, csv) {
   apps.append("text")
     .attr("class", "total_time")
     .attr("x", width)
-    .attr("dy", "1.25em")
+    .attr("dy", "1.4em")
     .attr("font-size", rect_height / 2)
     .attr("text-anchor", "end")
     .attr("opacity", 0)
@@ -211,7 +211,7 @@ d3.csv("yesterday.csv", function(error, csv) {
 
   apps.append("text")
     .attr("dx", "0.5em")
-    .attr("dy", "1.25em")
+    .attr("dy", "1.4em")
     .attr("font-size", rect_height / 2)
     .attr("text-anchor", "top")
     .text(function(d) { return d.key; });
