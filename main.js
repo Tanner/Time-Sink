@@ -111,11 +111,32 @@ d3.csv("yesterday.csv", function(error, csv) {
     .entries(csv);
 
   // Take the unix times and turn them into a time JS/d3 can use
+  // Also calculates the foreground total time so we don't have to do it each time we want it
   data.forEach(function(app) {
+    var foreground_time = 0;
+
     app.values.forEach(function(values) {
       values.foreground_begin = new Date(values["Foreground Begin (Unix Time)"] * 1000);
       values.foreground_end = new Date(values["Foreground End (Unix Time)"] * 1000);
+
+      foreground_time += values.foreground_end - values.foreground_begin;
     });
+
+    foreground_time /= 1000;
+
+    var foreground_total = {};
+    foreground_total.days = Math.floor(foreground_time / (24 * 60 * 60));
+    foreground_time -= foreground_total.days * (24 * 60 * 60);
+
+    foreground_total.hours = Math.floor(foreground_time / (60 * 60));
+    foreground_time -= foreground_total.hours * (60 * 60);
+
+    foreground_total.minutes = Math.floor(foreground_time / 60);
+    foreground_time -= foreground_total.minutes * 60;
+
+    foreground_total.seconds = Math.floor(foreground_time);
+
+    app.foreground_total = foreground_total;
   });
 
   // Set up our X/Y domains
@@ -182,20 +203,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("text-anchor", "top")
     .text(function(d) { return d.key; })
     .on("mouseover", function(d, i) {
-      var foreground_time = d3.sum(d.values.map(function(e) { return e.foreground_end - e.foreground_begin; })) / 100;
-
-      var days = Math.floor(foreground_time / (24 * 60 * 60));
-      foreground_time -= days * (24 * 60 * 60);
-
-      var hours = Math.floor(foreground_time / (60 * 60));
-      foreground_time -= hours * (60 * 60);
-
-      var minutes = Math.floor(foreground_time / 60);
-      foreground_time -= minutes * 60;
-
-      var seconds = Math.floor(foreground_time);
-
-      d3.select(this).text(d.key + " - " + days + "d " + hours + "h " + minutes + "m " + seconds + "s");
+      d3.select(this).text(d.key + " - " + d.foreground_total.days + "d " + d.foreground_total.hours + "h " + d.foreground_total.minutes + "m " + d.foreground_total.seconds + "s");
     })
     .on("mouseout", function(d) {
       d3.select(this).text(d.key);
