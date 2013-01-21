@@ -158,7 +158,6 @@ d3.csv("yesterday.csv", function(error, csv) {
     .text(function(d) { return d.key; })
     .on("mouseover", function(d, i) {
       var foreground_time = d3.sum(d.values.map(function(e) { return e.foreground_end - e.foreground_begin; })) / 100;
-      console.log(foreground_time);
 
       var days = Math.floor(foreground_time / (24 * 60 * 60));
       foreground_time -= days * (24 * 60 * 60);
