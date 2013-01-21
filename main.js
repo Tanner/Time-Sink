@@ -199,7 +199,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .style("fill", "url(#gradient)");
 
   apps.append("text")
-    .attr("dx", "1em")
+    .attr("dx", "0.5em")
     .attr("dy", "1.25em")
     .attr("font-size", rect_height / 2)
     .attr("text-anchor", "top")
