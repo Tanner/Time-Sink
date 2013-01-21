@@ -201,6 +201,7 @@ d3.csv("yesterday.csv", function(error, csv) {
   apps.append("text")
     .attr("class", "total_time")
     .attr("x", width)
+    .attr("dx", "-0.5em")
     .attr("dy", "1.4em")
     .attr("font-size", rect_height / 2)
     .attr("text-anchor", "end")
