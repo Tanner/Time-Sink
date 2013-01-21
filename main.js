@@ -174,11 +174,11 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("transform", function(d, i) { return "translate(0, " + (height - rect_height - y(i)) + ")"; })
     .on("mouseover", function(d, i) {
       d3.selectAll(".id-" + i + " rect.time").style("fill", "url(#hover_gradient)");
-      d3.select(this).select("text").text(d.key + " - " + d.foreground_total.days + "d " + d.foreground_total.hours + "h " + d.foreground_total.minutes + "m " + d.foreground_total.seconds + "s");
+      d3.select(this).select("text.total_time").style("opacity", 1);
     })
     .on("mouseout", function(d, i) {
       d3.selectAll(".id-" + i + " rect.time").style("fill", "url(#gradient)");
-      d3.select(this).select("text").text(d.key);
+      d3.select(this).select("text.total_time").style("opacity", 0);
     });
 
   apps.append("rect")
@@ -197,6 +197,17 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); })
     .attr("clip-path", "url(#clip)")
     .style("fill", "url(#gradient)");
+
+  apps.append("text")
+    .attr("class", "total_time")
+    .attr("x", width)
+    .attr("dy", "1.25em")
+    .attr("font-size", rect_height / 2)
+    .attr("text-anchor", "end")
+    .attr("opacity", 0)
+    .text(function(d) {
+      return d.foreground_total.days + "d " + d.foreground_total.hours + "h " + d.foreground_total.minutes + "m " + d.foreground_total.seconds + "s";
+    });
 
   apps.append("text")
     .attr("dx", "0.5em")
