@@ -82,6 +82,26 @@ hover_gradient.append("svg:stop")
     .attr("stop-color", "#4a563e")
     .attr("stop-opacity", 1);
 
+// Also set up the app background gradient
+var app_gradient = svg.append("defs")
+  .append("linearGradient")
+  .attr("id", "app_gradient")
+  .attr("x1", "0%")
+  .attr("y1", "0%")
+  .attr("x2", "0%")
+  .attr("y2", "100%")
+  .attr("spreadMethod", "pad");
+
+app_gradient.append("svg:stop")
+  .attr("offset", "0%")
+  .attr("stop-color", "#191919")
+  .attr("stop-opacity", 1);
+
+app_gradient.append("svg:stop")
+    .attr("offset", "100%")
+    .attr("stop-color", "#101010")
+    .attr("stop-opacity", 1);
+
 // Load the CSV
 d3.csv("yesterday.csv", function(error, csv) {
   // Make our data a hierarchy
@@ -132,18 +152,23 @@ d3.csv("yesterday.csv", function(error, csv) {
     .attr("class", function(d, i) { return "app id-" + i; })
     .attr("transform", function(d, i) { return "translate(0, " + (height - rect_height - y(i)) + ")"; })
     .on("mouseover", function(d, i) {
-      d3.select(this).selectAll("rect").style("fill", "url(#hover_gradient)");
-      d3.selectAll(".id-" + i + " rect").style("fill", "url(#hover_gradient)");
+      d3.selectAll(".id-" + i + " rect.time").style("fill", "url(#hover_gradient)");
     })
     .on("mouseout", function(d, i) {
-      d3.select(this).selectAll("rect").style("fill", "url(#gradient)");
-      d3.selectAll(".id-" + i + " rect").style("fill", "url(#gradient)");
+      d3.selectAll(".id-" + i + " rect.time").style("fill", "url(#gradient)");
     });
+
+  apps.append("rect")
+    .attr("width", width)
+    .attr("height", rect_height)
+    .style("stroke", "#000")
+    .style("fill", "url(#app_gradient)");
 
   apps.selectAll("rect")
     .data(function(d) { return d.values; })
     .enter()
     .append("rect")
+    .attr("class", "time")
     .attr("x", function(d) { return x(d.foreground_begin); })
     .attr("height", rect_height)
     .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); })
@@ -195,6 +220,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .data(function(d) { return d.values; })
     .enter()
     .append("rect")
+    .attr("class", "time")
     .attr("x", function(d) { return x2(d.foreground_begin); })
     .attr("height", rect_height)
     .attr("width", function(d) { return x2(d.foreground_end) - x2(d.foreground_begin); })
@@ -213,7 +239,7 @@ function brush() {
 
   focus.select(".x.axis").call(xAxis);
 
-  focus.selectAll(".app rect")
+  focus.selectAll("rect.time")
     .attr("x", function(d) { return x(d.foreground_begin); })
     .attr("width", function(d) { return x(d.foreground_end) - x(d.foreground_begin); });
 }
