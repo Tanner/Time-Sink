@@ -62,6 +62,26 @@ gradient.append("svg:stop")
     .attr("stop-color", "#563e53")
     .attr("stop-opacity", 1);
 
+// Also set up the hover gradient
+var hover_gradient = svg.append("defs")
+  .append("linearGradient")
+  .attr("id", "hover_gradient")
+  .attr("x1", "0%")
+  .attr("y1", "0%")
+  .attr("x2", "0%")
+  .attr("y2", "100%")
+  .attr("spreadMethod", "pad");
+
+hover_gradient.append("svg:stop")
+  .attr("offset", "0%")
+  .attr("stop-color", "#6e805c")
+  .attr("stop-opacity", 1);
+
+hover_gradient.append("svg:stop")
+    .attr("offset", "100%")
+    .attr("stop-color", "#4a563e")
+    .attr("stop-opacity", 1);
+
 // Load the CSV
 d3.csv("yesterday.csv", function(error, csv) {
   // Make our data a hierarchy
@@ -109,8 +129,16 @@ d3.csv("yesterday.csv", function(error, csv) {
     .data(data)
     .enter()
     .append("g")
-    .attr("class", "app")
-    .attr("transform", function(d, i) { return "translate(0, " + (height - rect_height - y(i)) + ")"; });
+    .attr("class", function(d, i) { return "app id-" + i; })
+    .attr("transform", function(d, i) { return "translate(0, " + (height - rect_height - y(i)) + ")"; })
+    .on("mouseover", function(d, i) {
+      d3.select(this).selectAll("rect").style("fill", "url(#hover_gradient)");
+      d3.selectAll(".id-" + i + " rect").style("fill", "url(#hover_gradient)");
+    })
+    .on("mouseout", function(d, i) {
+      d3.select(this).selectAll("rect").style("fill", "url(#gradient)");
+      d3.selectAll(".id-" + i + " rect").style("fill", "url(#gradient)");
+    });
 
   apps.selectAll("rect")
     .data(function(d) { return d.values; })
@@ -161,7 +189,7 @@ d3.csv("yesterday.csv", function(error, csv) {
     .data(data)
     .enter()
     .append("g")
-    .attr("class", "app")
+    .attr("class", function(d, i) { return "app id-" + i; })
     .attr("transform", function(d, i) { return "translate(0, " + (height2 - rect_height - y2(i)) + ")"; });
 
   apps2.selectAll("rect")
